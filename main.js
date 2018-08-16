@@ -26,9 +26,11 @@ const pomodoro = (customSeconds) => {
     seconds.textContent = `${remainderSeconds < 10 ? 0 : ''}${remainderSeconds}`;
     
     if (secondsLeft < 0) {
+      isRunning = false;
       clearInterval(countdown);
       minutes.textContent = minutesValue;
       seconds.textContent = secondsValue;
+      buttonStart.textContent = 'старт';
       document.title = '0:00';
       audio.play();
     }
@@ -57,12 +59,12 @@ const pauseTimer = () => {
 
 const timerHandler = () => {
   if (isRunning === false) {
+    buttonStart.textContent = 'пауза';
     startTimer();
   } else if (isRunning === true) {
+    buttonStart.textContent = 'старт';
     pauseTimer();
   }
-  
-  buttonStart.textContent === 'старт' ? buttonStart.textContent = 'пауза' : buttonStart.textContent = 'старт';
 }
 
 buttonStart.addEventListener('click', timerHandler);
