@@ -1,22 +1,22 @@
 // Таймер
-let countdown;
-// let isRunning = false;
-
 const buttonStart = document.querySelector('.start');
 const audio = document.querySelector('audio');
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
-let minutesValue = minutes.textContent;
-let secondsValue = seconds.textContent;
+let minutesValue = Number(minutes.textContent ) * 60;
+let secondsValue = Number(seconds.textContent);
+let timer = minutesValue + secondsValue;
+let isRunning = false;
+let countdown;
+let pausedTime;
 
-// const buttonPause = document.querySelector('.pause');
-
+// Таймер
 const pomodoro = (customSeconds) => {
+  isRunning = true;
+ 
   const start = Date.now();
-  const p = document.querySelector('p');
-
-  clearInterval(countdown);
-
+  
+  // clearInterval(countdown);
   countdown = setInterval(() => {
     const secondsPassed = Math.floor((Date.now() - start) / 1000);
     const secondsLeft = customSeconds - secondsPassed;
@@ -24,9 +24,7 @@ const pomodoro = (customSeconds) => {
     const minutesLeft = Math.floor(secondsLeft / 60);
     minutes.textContent = `${minutesLeft}`;
     seconds.textContent = `${remainderSeconds < 10 ? 0 : ''}${remainderSeconds}`;
-    //p.textContent = timer;
-    //document.title = timer;
-
+    
     if (secondsLeft < 0) {
       clearInterval(countdown);
       minutes.textContent = minutesValue;
@@ -45,10 +43,29 @@ seconds.addEventListener('input', () => {
   secondsValue = seconds.textContent;
 });
 
-buttonStart.addEventListener('click', () => {
-  // isRunning = true;
-  pomodoro((Number(minutesValue) * 60) + Number(secondsValue));
-});
+
+// Пауза, сброс и продолжение таймера
+const startTimer = () => {
+  const remainingTime = (Number(minutes.textContent ) * 60) + Number(seconds.textContent);
+  pomodoro(remainingTime);
+}
+
+const pauseTimer = () => {
+  clearInterval(countdown);
+  isRunning = false;
+}
+
+const timerHandler = () => {
+  if (isRunning === false) {
+    startTimer();
+  } else if (isRunning === true) {
+    pauseTimer();
+  }
+  
+  buttonStart.textContent === 'старт' ? buttonStart.textContent = 'пауза' : buttonStart.textContent = 'старт';
+}
+
+buttonStart.addEventListener('click', timerHandler);
 
 
 // Список задач
@@ -76,4 +93,3 @@ input.addEventListener('keyup', e => {
     addItem();
   }
 });
-
