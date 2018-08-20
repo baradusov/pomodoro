@@ -1,5 +1,5 @@
 // Таймер
-const buttonStart = document.querySelector('.start');
+const buttonStart = document.querySelector('.button-start');
 const audio = document.querySelector('audio');
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
