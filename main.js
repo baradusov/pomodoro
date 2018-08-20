@@ -1,3 +1,15 @@
+// "Ленивая" загрузка
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.style.opacity = 0;
+  document.body.classList.add("unloaded");
+  document.body.style.opacity = '';
+});
+
+window.onload = () => {
+  document.body.classList.remove("unloaded");
+};
+
+ 
 // Таймер
 const buttonStart = document.querySelector('.button-start');
 const audio = document.querySelector('audio');
