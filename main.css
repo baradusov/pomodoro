@@ -1,46 +1,77 @@
 html {
-  height: 100%;
+  box-sizing: border-box;
 }
 
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
   margin: 0;
+  color: #ffffff;
+  font-size: 17px;
+  line-height: 1.2;
+  font-family: Roboto, sans-serif;
+  background-color: #3b3a45;
 }
 
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  font-size: 128px;
-  font-family: Roboto, sans-serif;
+  min-height: 100vh;
+  padding: 40px;
 }
 
-p {
-  margin: 0;
+.passed-tomatos {
+  margin-bottom: 60px;
+}
+
+.timer {
+  margin-top: 0;
+  margin-bottom: 50px;
+  font-size: 9em;
+  line-height: 1.2;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 350px;
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+.button {
+  width: 170px;
+  height: 50px;
+  font-size: 1.2em;
+  line-height: 1.2;
+  border: 3px solid #FFFFFF;
+  cursor: pointer;
   margin-bottom: 10px;
 }
 
-.todo-container {
-  display:  flex;
-  flex-direction: column;
+.button-start {
+  color: #3b3a45;
+  background-color: #ffffff;
 }
 
-.todo-title {
-  font-size: 32px;
-  text-align: center;
+.button-stop {
+  color: #ffffff;
+  background-color: transparent;
 }
 
-.todo-add {
-  margin-bottom:  30px;
-}
-
-label {
-  font-size: 16px;
-}
-
-input[type="checkbox"] {
-  margin-right: 20px;
+@media screen and (max-width: 420px) {
+  .timer {
+    font-size: 7em;
+  }
+  .buttons-container {
+    justify-content: center;
+  }
 }
