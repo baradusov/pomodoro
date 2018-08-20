@@ -55,6 +55,7 @@ body {
   border: 3px solid #FFFFFF;
   cursor: pointer;
   margin-bottom: 10px;
+  text-transform: capitalize;
 }
 
 .button-start {
