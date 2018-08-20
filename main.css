@@ -19,6 +19,20 @@ body {
   background-color: #3b3a45;
 }
 
+body {
+  transition-property: opacity, transform;
+  transition-duration: 0.5s;
+  transition-delay: 0.5s;
+  transition-timing-function: ease-in-out;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.unloaded {
+  opacity: 0;
+  transform: translateY(1vh);
+}
+
 .container {
   display: flex;
   flex-direction: column;
