@@ -1,109 +1,195 @@
-// "Ленивая" загрузка
-document.addEventListener("DOMContentLoaded", () => {
+/**
+ * "Ленивая" загрузка
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
   document.body.style.opacity = 0;
-  document.body.classList.add("unloaded");
+  document.body.classList.add('unloaded');
   document.body.style.opacity = '';
 });
 
 window.onload = () => {
-  document.body.classList.remove("unloaded");
+  document.body.classList.remove('unloaded');
 };
 
- 
+
+/**
+ * Переменные
+ */
+
 // Таймер
 const buttonStart = document.querySelector('.button-start');
+const buttonStop = document.querySelector('.button-stop');
 const audio = document.querySelector('audio');
 const minutes = document.querySelector('.minutes');
 const seconds = document.querySelector('.seconds');
-let minutesValue = Number(minutes.textContent ) * 60;
-let secondsValue = Number(seconds.textContent);
-let timer = minutesValue + secondsValue;
 let isRunning = false;
 let countdown;
 let pausedTime;
+let currentIndexOfSequence = 0;
+let currentSequence;
 
-// Таймер
-const pomodoro = (customSeconds) => {
-  isRunning = true;
- 
-  const start = Date.now();
-  
-  // clearInterval(countdown);
-  countdown = setInterval(() => {
-    const secondsPassed = Math.floor((Date.now() - start) / 1000);
-    const secondsLeft = customSeconds - secondsPassed;
-    const remainderSeconds = secondsLeft % 60;
-    const minutesLeft = Math.floor(secondsLeft / 60);
-    minutes.textContent = `${minutesLeft}`;
-    seconds.textContent = `${remainderSeconds < 10 ? 0 : ''}${remainderSeconds}`;
-    
-    if (secondsLeft < 0) {
-      isRunning = false;
-      clearInterval(countdown);
-      minutes.textContent = minutesValue;
-      seconds.textContent = secondsValue;
-      buttonStart.textContent = 'старт';
-      document.title = '0:00';
-      audio.play();
-    }
-  }, 1000);
+// Настройки
+let timerState = {
+  currentState: null,
+  isRunning: false,
+  pomodoro: 25, // в минутах
+  shortBreak: 5, // в минутах
+  longBreak: 5, // в минутах
+  startTime: null,
+  endTime: null,
+  remainedTime: null,
+  time: null,
+  autoStart: true
 };
 
-minutes.addEventListener('input', () => {
-  minutesValue = minutes.textContent;
-});
+// Последовательность таймеров и перерывов
+let sequence = [
+  'pomodoro',
+  'shortBreak',
+  'pomodoro',
+  'shortBreak',
+  'pomodoro',
+  'shortBreak',
+  'pomodoro',
+  'longBreak'
+];
 
-seconds.addEventListener('input', () => {
-  secondsValue = seconds.textContent;
-});
 
+/**
+ * Автоматическое переключение сессий
+ */
 
-// Пауза, сброс и продолжение таймера
-const startTimer = () => {
-  const remainingTime = (Number(minutes.textContent ) * 60) + Number(seconds.textContent);
-  pomodoro(remainingTime);
+const autoStartTimer = () => {
+  currentSequence = sequence[currentIndexOfSequence];
+  currentIndexOfSequence += 1;
+
+   if (sequence[currentIndexOfSequence] === 'shortBreak') {
+     shortBreak();
+   }
+
+   if (sequence[currentIndexOfSequence] === 'pomodoro') {
+     startTimer();
+   }
+
+   if (sequence[currentIndexOfSequence] === 'longBreak') {
+     longBreak();
+   }
 }
 
+
+/**
+ * Таймер
+ */
+
+ const pomodoro = (time) => {
+   timerState.isRunning = true;
+
+   countdown = setInterval(() => {
+     const secondsPassed = Math.floor((Date.now() - timerState.startTime) / 1000);
+     const secondsLeft = time - secondsPassed;
+     const remainderSeconds = secondsLeft % 60;
+     const minutesLeft = Math.floor(secondsLeft / 60);
+
+     minutes.textContent = `${minutesLeft}`;
+     seconds.textContent = `${remainderSeconds < 10 ? 0 : ''}${remainderSeconds}`;
+     document.title = `${minutesLeft}:${remainderSeconds < 10 ? 0 : ''}${remainderSeconds}`;
+
+     if (secondsLeft <= 0) {
+       clearInterval(countdown);
+       audio.play();
+
+       // Автоматически переключаем сессию
+       autoStartTimer();
+     }
+   }, 1000);
+ };
+
+
+/**
+ * Сессии таймера
+ */
+
+// Короткий перерыв
+const shortBreak = () => {
+  timerState.time = timerState.shortBreak * 60000;
+  timerState.startTime = Date.now();
+  timerState.endTime = timerState.startTime + timerState.time;
+  pomodoro(Math.floor(timerState.time / 1000));
+}
+
+// Большой перерыв
+const longBreak = () => {
+  timerState.time = timerState.longBreak * 60000;
+  timerState.startTime = Date.now();
+  timerState.endTime = timerState.startTime + timerState.time;
+  pomodoro(Math.floor(timerState.time / 1000));
+  currentIndexOfSequence = -1;
+}
+
+// Запуск таймера
+const startTimer = () => {
+  // Перевод минут в миллисекунды, заменить timerState.pomodoro на общее
+  timerState.time = timerState.remainedTime !== null ? timerState.remainedTime : timerState.pomodoro * 60000;
+  timerState.startTime = Date.now();
+  timerState.endTime = timerState.startTime + timerState.time;
+  pomodoro(Math.floor(timerState.time / 1000));
+}
+
+// Пауза таймера
 const pauseTimer = () => {
   clearInterval(countdown);
-  isRunning = false;
+  timerState.isRunning = false;
+  timerState.remainedTime = timerState.endTime - Date.now();
+  timerState.endTime = null;
+  timerState.startTime = null;
 }
 
+// Управление запуском, паузой и продолжением таймера
 const timerHandler = () => {
-  if (isRunning === false) {
+  if (timerState.isRunning === false) {
     buttonStart.textContent = 'пауза';
     startTimer();
-  } else if (isRunning === true) {
+  } else if (timerState.isRunning === true) {
     buttonStart.textContent = 'старт';
     pauseTimer();
   }
 }
 
-buttonStart.addEventListener('click', timerHandler);
+// Сброс таймера
+const resetTimer = () => {
+  clearInterval(countdown);
+  timerState.isRunning = false;
+  timerState.remainedTime = null;
+  timerState.endTime = null;
+  timerState.startTime = null;
+  buttonStart.textContent = 'старт';
 
-
-// Список задач
-const input = document.querySelector('.todo-input');
-const button = document.querySelector('.todo-add');
-const list = document.querySelector('.todo-container');
-
-const addItem = () => {
-  if (input.value.length > 0) {
-    const checkbox = document.createElement('input');
-    checkbox.type = "checkbox";
-
-    const label = document.createElement('label');
-    label.append(checkbox);
-
-    label.append(input.value);
-    list.append(label);
-    input.value = '';
+  if (currentSequence === 'pomodoro') {
+    timerState.time = timerState.pomodoro;
   }
-};
 
-button.addEventListener('click', addItem);
-input.addEventListener('keyup', e => {
-  if (e.keyCode === 13) {
-    addItem();
+  if (currentSequence === 'shortBreak') {
+    timerState.time = timerState.shortBreak;
+  }
+
+  if (currentSequence === 'longBreak') {
+    timerState.time = timerState.longBreak;
+  }
+
+  // TODO: Переделать рендеринг времени при сбросе
+  minutes.textContent = timerState.time / 60000;
+  seconds.textContent = '00';
+}
+
+// Запуск таймера по кнопке
+buttonStart.addEventListener('click', timerHandler);
+document.addEventListener('keyup', (e)  => {
+  if (e.keyCode === 32) {
+    e.preventDefault();
+    timerHandler();
   }
 });
+
+// Сброс таймера
+buttonStop.addEventListener('click', resetTimer);
