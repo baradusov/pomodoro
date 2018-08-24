@@ -24,8 +24,12 @@
     <!-- <p>прошло <span>0</span>часов <span>00</span> мин</p> -->
     <audio src="SmallGlockE.wav"></audio>
   </div>
-
   <script src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 </body>
 
 </html>
