@@ -98,6 +98,7 @@ const pomodoro = (time) => {
         if (secondsLeft <= 0) {
             clearInterval(countdown);
             audio.play();
+            navigator.vibrate(500);
 
             // Автоматически переключаем сессию
             autoStartTimer();
