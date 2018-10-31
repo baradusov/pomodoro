@@ -17,6 +17,7 @@ body {
   font-family: Roboto, sans-serif;
   font-weight: 300;
   background-color: #3b3a45;
+
   /* FIXME: Возможно оверфлоу будет иметь последствия */
   overflow: auto;
 }
@@ -70,7 +71,7 @@ body {
   height: 50px;
   font-size: 1.2em;
   line-height: 1.2;
-  border: 3px solid #FFFFFF;
+  border: 3px solid #ffffff;
   cursor: pointer;
   margin-bottom: 10px;
   text-transform: capitalize;
@@ -90,6 +91,7 @@ body {
   .timer {
     font-size: 7em;
   }
+
   .buttons-container {
     justify-content: center;
   }
