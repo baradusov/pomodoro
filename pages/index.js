@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from 'lib/hooks/useStore';
 
 import styles from 'styles/Home.module.css';
+import { settings } from 'lib/store/tomato';
 
 const Home = () => {
   const {
@@ -46,6 +47,18 @@ const Home = () => {
     }
   };
 
+  const renderBreakInfo = () => {
+    if (resting) {
+      if (isLongBreak) {
+        return 'long break';
+      }
+
+      return 'short break';
+    }
+
+    return 'working';
+  };
+
   useEffect(() => {
     audio.setAudio(new Audio('/ding.wav'));
   }, [audio.setAudio]);
@@ -65,9 +78,10 @@ const Home = () => {
         </div>
 
         <div className={styles.info}>
-          <p>current: {current}</p>
-          <p>resting: {String(resting)}</p>
-          <p>long break: {String(isLongBreak)}</p>
+          <p>
+            passed: {current} of {settings.sessions}
+          </p>
+          <p>{renderBreakInfo()}</p>
         </div>
       </main>
     </>
