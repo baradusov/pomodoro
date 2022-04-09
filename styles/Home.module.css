@@ -3,16 +3,23 @@
   grid-template-columns: 2fr 2fr 1fr;
   grid-template-rows: 9fr 1fr;
   height: 100vh;
-  padding: 30px;
+}
+
+.timer {
+  padding: 36px 30px;
+  border-right: 1px solid #0707e0;
 }
 
 .timer {
   color: #0707e0;
-  font-size: 200px;
+  font-size: 300px;
+  line-height: 1;
 }
 
 .buttons {
   grid-row-start: 2;
+  padding: 36px 30px;
+  border-right: 1px solid #0707e0;
 }
 
 .button {

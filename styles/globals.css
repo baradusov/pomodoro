@@ -6,8 +6,9 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Alumni Sans', sans-serif;
+  font-size: 18px;
   line-height: 1.2;
+  font-family: 'Alumni Sans', sans-serif;
 }
 
 a {
@@ -17,4 +18,8 @@ a {
 
 p {
   margin: 0;
+}
+
+button {
+  cursor: pointer;
 }
