@@ -20,7 +20,7 @@ const Home = () => {
       remained,
       sessions,
     },
-    tasks: { tasks, addNewTask },
+    tasks: { allTasks, addNewTask, currentTask },
     audio,
   } = useStore();
 
@@ -79,21 +79,31 @@ const Home = () => {
     audio.setAudio(new Audio('/ding.wav'));
   }, [audio]);
 
+  console.log(currentTask?.currentTomato, currentTask?.tomatos);
+
   return (
     <>
       <Head>
         <title>{timer}</title>
       </Head>
       <main className={styles.main}>
-        <div className={styles.timer}>
-          <p>{timer}</p>
+        <div className={styles.timerContainer}>
+          <p className={styles.timer}>{timer}</p>
+          {currentTask && (
+            <p className={styles.currentTask}>
+              {currentTask.text}{' '}
+              <span>
+                ({currentTask.currentTomato}/{currentTask.tomatos})
+              </span>
+            </p>
+          )}
         </div>
 
         <div className={styles.tasks}>
           <p className={styles.taskTitle}>Plan</p>
 
           <ul className={styles.taskList}>
-            {Array.from(tasks).map(([id, task]) => {
+            {Array.from(allTasks).map(([id, task]) => {
               const classes = cn(
                 styles.task,
                 task.completed && styles.completed
