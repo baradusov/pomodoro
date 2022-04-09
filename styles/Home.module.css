@@ -40,4 +40,49 @@
 .info {
   grid-row-start: 2;
   grid-column-start: 2;
+  grid-column-end: 4;
+  padding: 36px 30px;
+  border-top: 1px solid #0707e0;
+}
+
+.tasks {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  padding: 36px 30px;
+}
+
+.taskTitle {
+  margin-bottom: 60px;
+  font-size: 18px;
+  color: #0707e0;
+  text-transform: uppercase;
+}
+
+.taskList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #0707e0;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 14px;
+  border-bottom: 1px solid #0707e0;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.input {
+  width: 100%;
+  padding: 20px 0;
+  border: none;
+  font: inherit;
+  color: #0707e0;
+  border-bottom: 1px solid #0707e0;
 }
