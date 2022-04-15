@@ -65,7 +65,7 @@ const Home = () => {
 
   const handleAddNewTask = (event) => {
     if (event.key === 'Enter' && event.target.value.trim() !== '') {
-      addNewTask(event.target.value);
+      addNewTask({ text: event.target.value });
 
       inputRef.current.value = '';
     }
@@ -78,8 +78,6 @@ const Home = () => {
   useEffect(() => {
     audio.setAudio(new Audio('/ding.wav'));
   }, [audio]);
-
-  console.log(currentTask?.currentTomato, currentTask?.tomatos);
 
   return (
     <>
