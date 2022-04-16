@@ -26,6 +26,7 @@
 }
 
 .buttons {
+  display: flex;
   grid-row-start: 2;
   padding: 36px 30px;
   border-right: 1px solid #0707e0;
@@ -35,6 +36,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 20px;
   padding: 20px 30px;
   width: 100%;
   max-width: 210px;
@@ -81,6 +83,11 @@
   padding-bottom: 20px;
   padding-right: 14px;
   border-bottom: 1px solid #0707e0;
+}
+
+.taskControls {
+  display: flex;
+  align-items: center;
 }
 
 .completed {

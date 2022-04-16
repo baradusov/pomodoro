@@ -20,8 +20,9 @@ const Home = () => {
       remained,
       sessions,
     },
-    tasks: { allTasks, addNewTask, currentTask },
+    tasks: { allTasks, addNewTask, currentTask, removeTask },
     audio,
+    reset,
   } = useStore();
 
   const inputRef = useRef(null);
@@ -71,8 +72,8 @@ const Home = () => {
     }
   };
 
-  const handleCompleteTask = (task) => {
-    task.toggleCompleteTask();
+  const handleRemoveTask = (taskId) => {
+    removeTask(taskId);
   };
 
   useEffect(() => {
@@ -107,14 +108,91 @@ const Home = () => {
                 task.completed && styles.completed
               );
 
+              const handleToggleEditing = (event) => {
+                if (event.key === 'Enter' && event.target.value.trim() !== '') {
+                  task.toggleEditing();
+                }
+              };
+
+              const handleSetText = (event) => {
+                task.setText(event.target.value);
+              };
+
+              const handleSetTomatos = (event) => {
+                task.setTomatos(Number(event.target.value));
+              };
+
               return (
                 <li
                   className={classes}
                   key={id}
-                  onClick={() => handleCompleteTask(task)}
+                  // onClick={() => handleCompleteTask(task)}
                 >
-                  <p>{task.text}</p>
-                  <p>{task.tomatos}</p>
+                  {task.isEditing ? (
+                    <>
+                      <div className={styles.taskControls}>
+                        <p
+                          style={{
+                            display: 'block',
+                            paddingRight: 10,
+                            cursor: 'pointer',
+                          }}
+                          title="Complete task"
+                          onClick={task.toggleCompleteTask}
+                        >
+                          {task.completed ? '+' : '-'}
+                        </p>
+                        <input
+                          autoFocus
+                          className={styles.input}
+                          value={task.text}
+                          onChange={handleSetText}
+                          onKeyDown={handleToggleEditing}
+                        />
+                      </div>
+
+                      <input
+                        className={styles.input}
+                        style={{ width: '100px' }}
+                        type="number"
+                        min={1}
+                        value={task.tomatos}
+                        onChange={handleSetTomatos}
+                        onKeyDown={handleToggleEditing}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.taskControls}>
+                        <p
+                          style={{
+                            display: 'block',
+                            paddingRight: 10,
+                            cursor: 'pointer',
+                          }}
+                          title="Complete task"
+                          onClick={task.toggleCompleteTask}
+                        >
+                          {task.completed ? '+' : '-'}
+                        </p>
+                        <p title="Edit task" onClick={task.toggleEditing}>
+                          {task.text}
+                        </p>
+                      </div>
+                      <div className={styles.taskControls}>
+                        <p title="Edit task" onClick={task.toggleEditing}>
+                          {task.tomatos}
+                        </p>
+                        <p
+                          style={{ marginLeft: 15, cursor: 'pointer' }}
+                          title="Remove task"
+                          onClick={() => handleRemoveTask(task.id)}
+                        >
+                          X
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </li>
               );
             })}
@@ -132,6 +210,9 @@ const Home = () => {
         <div className={styles.buttons}>
           <button className={styles.button} onClick={toggleState}>
             {canPause ? 'Start' : 'Pause'}
+          </button>
+          <button className={styles.button} onClick={reset}>
+            Reset
           </button>
         </div>
 
